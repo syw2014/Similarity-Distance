@@ -2,7 +2,7 @@
    @ File Name: similarity.hpp
    @ Method: 
    @ Author: Jerry Shi
-   @ Mail: jerryshi0110@gmail.com 
+   @ Mail  : jerryshi0110@gmail.com 
    @ Created Time: 2015年08月16日 星期日 14时38分56秒
  ************************************************************************/
 
@@ -29,7 +29,6 @@ similarity::~similarity()
 }
 
 //@param sstr: source string
-//
 bool similarity::isEnglish(const std::string& sstr)
 {
 	const char* pos = sstr.c_str();
@@ -47,6 +46,8 @@ bool similarity::isEnglish(const std::string& sstr)
 	return ret;
 }
 
+//@param sstr: source string
+//@param tstr: target string
 int similarity::editDistance(const std::string& sstr,const std::string& tstr)
 {
 	int n = sstr.length();
@@ -93,5 +94,5 @@ int similarity::editDistance(const std::string& sstr,const std::string& tstr)
 	if(isEnglish(sstr) && isEnglish(tstr))
 		return matrix[n][m];
 	else
-		return matrix[n][m] / 3; //
+		return matrix[n][m] / 3; // return if string contain chinese
 }

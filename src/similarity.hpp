@@ -9,6 +9,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+using namespace std;
 
 class similarity
 {
@@ -16,6 +21,7 @@ class similarity
 		similarity();
 		~similarity();
 
+		float PointDistance(vector<float>& P,vector<float>& Q,int p);
 		int editDistance(const std::string& sstr,const std::string& tstr);
 		bool isEnglish(const std::string& sstr);
 };
@@ -46,8 +52,51 @@ bool similarity::isEnglish(const std::string& sstr)
 	return ret;
 }
 
-//@param sstr: source string
-//@param tstr: target string
+// Minkowski distance 
+// is no related with data distribution
+// Formula: (sum((Xi - Yi)^p))^(1/p)
+// Description: p = 2,thet is Euclidean istance
+//				p = 1,that is Manhattan distance
+//				p -> infinity,that is Chebyshev distance,formula: max|Xi - Yi|
+// Note: if amplitude is bigger in x/y coordinate,now you need z-transform, 
+//
+// @param P: point p coordinate vector
+// @param Q: ppint q coordinate vector
+// @param p: decide which distance will you want to use
+float similarity::PointDistance(vector<float>& P, vector<float>& Q, int p)
+{
+	if(P.size() != Q.size() || p < 0)
+		return -1;
+	float sum = 0.0;
+	
+   for(std::size_t i = 0; i < P.size(); ++i)
+   {
+	   float XY_Minus = (float)abs(P[i] - Q[i]);
+	   float XY_square = 1;
+	   for(int j = 0;j < p; ++j)
+			XY_square *= XY_Minus;
+	   sum += XY_square;
+   }
+
+   if(2 == p)
+   {
+	   std::cout << "Euclidean Distance: ";
+	   return (float)sqrt(sum);
+   }
+   else if(1 == p)
+   {
+	   std::cout << "Manhattan Distance: ";
+	   return sum;
+   }
+   else
+   {
+	   std::cout << "Minkowski Distance: ";
+	   return (float)pow(sum,p);
+   }
+}
+
+// @param sstr: source string
+// @param tstr: target string
 int similarity::editDistance(const std::string& sstr,const std::string& tstr)
 {
 	int n = sstr.length();
